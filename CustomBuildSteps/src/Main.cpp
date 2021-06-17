@@ -10,14 +10,15 @@ const unordered_map<string, string> extensions =
 	{ ".lib", "libs" },
 	{ ".dll", "dlls" }
 };
+filesystem::path prefix;
 
 void recursiveCopy(const filesystem::path& from, const filesystem::path& to);
 
 int main(int argc, char** argv)
 {
-	if (argc != 5)
+	if (argc != 6)
 	{
-		cout << "argc != 4" << endl;
+		cout << "argc != 5" << endl;
 
 		return -1;
 	}
@@ -26,12 +27,13 @@ int main(int argc, char** argv)
 	filesystem::path sources(argv[2]);
 	filesystem::path to(argv[3]);
 	filesystem::path docs(argv[4]);
+	prefix = argv[5];
 
 	filesystem::create_directories(to);
 
 	for (const auto& [key, value] : extensions)
 	{
-		filesystem::create_directories(to / value);
+		filesystem::create_directories(to / prefix / value);
 	}
 
 	for (const auto& i : filesystem::recursive_directory_iterator(binaries))
@@ -40,7 +42,7 @@ int main(int argc, char** argv)
 
 		if (it != extensions.end())
 		{
-			filesystem::copy(i, to / it->second, filesystem::copy_options::overwrite_existing);
+			filesystem::copy(i, to / prefix / it->second, filesystem::copy_options::overwrite_existing);
 		}
 	}
 
@@ -48,7 +50,7 @@ int main(int argc, char** argv)
 	{
 		if (filesystem::is_directory(i))
 		{
-			filesystem::path folder = to / "headers" / i.path().filename();
+			filesystem::path folder = to / prefix / "headers" / i.path().filename();
 
 			filesystem::create_directories(folder);
 
@@ -60,12 +62,12 @@ int main(int argc, char** argv)
 
 			if (it != extensions.end())
 			{
-				filesystem::copy(i, to / it->second, filesystem::copy_options::overwrite_existing);
+				filesystem::copy(i, to / prefix / it->second, filesystem::copy_options::overwrite_existing);
 			}
 		}
 	}
 
-	if (filesystem::exists(docs))
+	if (filesystem::exists(docs) && !filesystem::exists(to / docs.filename()))
 	{
 		filesystem::create_directories(to / docs.filename());
 
@@ -81,11 +83,11 @@ void recursiveCopy(const filesystem::path& from, const filesystem::path& to)
 	{
 		if (filesystem::is_directory(i))
 		{
-			filesystem::path folder = to / i.path().filename();
+			filesystem::path folder = to / prefix / i.path().filename();
 
 			filesystem::create_directories(folder);
 
-			recursiveCopy(from / i, to / folder);
+			recursiveCopy(from / i, to / prefix / folder);
 		}
 		else
 		{
