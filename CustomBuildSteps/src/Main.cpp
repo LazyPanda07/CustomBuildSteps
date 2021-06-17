@@ -83,11 +83,11 @@ void recursiveCopy(const filesystem::path& from, const filesystem::path& to)
 	{
 		if (filesystem::is_directory(i))
 		{
-			filesystem::path folder = to / prefix / i.path().filename();
+			filesystem::path folder = to / i.path().filename();
 
 			filesystem::create_directories(folder);
 
-			recursiveCopy(from / i, to / prefix / folder);
+			recursiveCopy(from / i, to / folder);
 		}
 		else
 		{
