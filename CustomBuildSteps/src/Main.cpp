@@ -12,13 +12,15 @@ const unordered_map<string, string> extensions =
 };
 filesystem::path prefix;
 
+void copyHeaders(const filesystem::path& pathToHeaders, const filesystem::path& to);
+
 void recursiveCopy(const filesystem::path& from, const filesystem::path& to);
 
 int main(int argc, char** argv)
 {
-	if (argc != 6)
+	if (argc < 6)
 	{
-		cout << "argc != 5" << endl;
+		cout << "argc must be >= 6" << endl;
 
 		return -1;
 	}
@@ -28,6 +30,13 @@ int main(int argc, char** argv)
 	filesystem::path to(argv[3]);
 	filesystem::path docs(argv[4]);
 	prefix = argv[5];
+
+	vector<filesystem::path> submodules;
+
+	for (size_t i = 6; i < argc; i++)
+	{
+		submodules.push_back(argv[i]);
+	}
 
 	filesystem::create_directories(to);
 
@@ -46,7 +55,26 @@ int main(int argc, char** argv)
 		}
 	}
 
-	for (const auto& i : filesystem::directory_iterator(sources))
+	copyHeaders(sources, to);
+
+	for (const auto& i : submodules)
+	{
+		copyHeaders(i, to);
+	}
+
+	if (filesystem::exists(docs) && !filesystem::exists(to / docs.filename()))
+	{
+		filesystem::create_directories(to / docs.filename());
+
+		system(format("xcopy /E /I {} {}\\", docs.string(), (to / docs.filename()).string()).data());
+	}
+
+	return 0;
+}
+
+void copyHeaders(const filesystem::path& pathToHeaders, const filesystem::path& to)
+{
+	for (const auto& i : filesystem::directory_iterator(pathToHeaders))
 	{
 		if (filesystem::is_directory(i))
 		{
@@ -66,15 +94,6 @@ int main(int argc, char** argv)
 			}
 		}
 	}
-
-	if (filesystem::exists(docs) && !filesystem::exists(to / docs.filename()))
-	{
-		filesystem::create_directories(to / docs.filename());
-
-		system(format("xcopy /E /I {} {}\\", docs.string(), (to / docs.filename()).string()).data());
-	}
-
-	return 0;
 }
 
 void recursiveCopy(const filesystem::path& from, const filesystem::path& to)
