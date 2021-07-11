@@ -47,6 +47,11 @@ int main(int argc, char** argv)
 
 	for (const auto& i : filesystem::recursive_directory_iterator(binaries))
 	{
+		if (i.path().string().find("Test") != string::npos)
+		{
+			continue;
+		}
+
 		auto it = extensions.find(i.path().extension().string());
 
 		if (it != extensions.end())
@@ -67,6 +72,14 @@ int main(int argc, char** argv)
 		filesystem::create_directories(to / docs.filename());
 
 		system(format("xcopy /E /I {} {}\\", docs.string(), (to / docs.filename()).string()).data());
+	}
+
+	for (const auto& [key, value] : extensions)
+	{
+		if (filesystem::is_empty(to / prefix / value))
+		{
+			filesystem::remove(to / prefix / value);
+		}
 	}
 
 	return 0;
