@@ -8,7 +8,9 @@ const unordered_map<string, string> extensions =
 {
 	{ ".h", "headers" },
 	{ ".lib", "libs" },
-	{ ".dll", "dlls" }
+	{ ".dll", "dlls" },
+	{ ".pdb", "pdbs" },
+	{ ".idb", "idbs" }
 };
 filesystem::path prefix;
 
