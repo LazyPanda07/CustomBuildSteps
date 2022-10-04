@@ -4,8 +4,7 @@
     <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LocalDebuggerCommandArguments>
-    </LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>C:\Users\semen\source\repos\WebFramework\bin\Debug-x64\WebFramework\ C:\Users\semen\source\repos\WebFramework\WebFramework\src C:\Users\semen\source\repos\WebFramework\build C:\Users\semen\source\repos\WebFramework\docs Debug-x64 C:\Users\semen\source\repos\WebFramework\BaseTCPServer\src C:\Users\semen\source\repos\WebFramework\INIParser\src C:\Users\semen\source\repos\WebFramework\Log\src C:\Users\semen\source\repos\WebFramework\Networks\src C:\Users\semen\source\repos\WebFramework\Networks\HTTP\JSON\src C:\Users\semen\source\repos\WebFramework\Networks\HTTP\src C:\Users\semen\source\repos\WebFramework\Networks\SocketStreams\src C:\Users\semen\source\repos\WebFramework\SHA256\src</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

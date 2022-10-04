@@ -17,7 +17,7 @@ using namespace std;
 
 const unordered_map<string, string> extensions =
 {
-	{ ".h", "headers" },
+	{ ".h", "include" },
 	{ ".lib", "libs" },
 	{ ".dll", "dlls" },
 	{ ".pdb", "pdbs" },
@@ -104,7 +104,7 @@ void copyHeaders(const filesystem::path& pathToHeaders, const filesystem::path& 
 	{
 		if (filesystem::is_directory(i))
 		{
-			filesystem::path folder = to / prefix / "headers" / i.path().filename();
+			filesystem::path folder = to / prefix / "include" / i.path().filename();
 
 			filesystem::create_directories(folder);
 
